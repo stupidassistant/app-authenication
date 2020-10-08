@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as firebase from 'firebase';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 const authDomain: string = "https://account.stupidassistant.com/token";
 const redirect_url: string = `${window.location.origin}/handleAuthToken`;
@@ -60,7 +60,18 @@ export default class ExampleComponent extends React.Component<Props, State> {
         </Router>
       );
     } else if (signedIn == true) {
-      return component;
+      return (
+        <Router>
+          <Switch>
+            <Route path='/handleAuthToken'>
+              <Redirect to={"/"} />
+            </Route>
+            <Route path='/'> 
+              {component}
+            </Route>
+          </Switch>
+        </Router>
+      );
     }
     return null;
   }
